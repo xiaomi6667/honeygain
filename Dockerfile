@@ -6,7 +6,5 @@ RUN apt update && \
 
 FROM honeygain/honeygain:latest
 COPY --from=build --chmod=777 /tini /tini
-USER appuser
-ENV LD_LIBRARY_PATH=/usr/lib
-WORKDIR /app
+USER root:root
 ENTRYPOINT ["/tini", "--"]
