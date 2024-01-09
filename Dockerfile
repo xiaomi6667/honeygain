@@ -1,7 +1,10 @@
-FROM honeygain/honeygain:latest
-ARG TINI_VERSION=v0.19.0
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-amd64 /tini
-RUN chmod +x /tini
+FROM debian:12 AS build
+RUN apt update && \
+    apt install wget && \
+    wget -O /tini https://github.com/krallin/tini/releases/download/v0.19.0/tini-amd64
+
+FROM honeygain/honeygain:latest /tini /tini
+COPY --from=build --chmod=777 
 USER appuser
 ENV LD_LIBRARY_PATH=/usr/lib
 WORKDIR /app
